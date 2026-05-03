@@ -1,0 +1,240 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Design tokens — light (paper) and dark (ink) themes
+   Civic-tech editorial aesthetic. No gradients-as-decoration. Hairlines only.
+   ────────────────────────────────────────────────────────────────────────── */
+:root {
+  /* paper / surface */
+  --paper: 247 244 238;          /* warm off-white */
+  --surface: 252 250 245;        /* card */
+  --surface-2: 242 238 230;      /* nested */
+  --hairline: 17 17 22 / 0.08;   /* not used directly, see below */
+  --hairline: 28 28 34;
+  /* foreground */
+  --ink: 14 15 18;
+  --muted: 234 230 222;
+  --muted-fg: 92 88 80;
+
+  /* accent: ember (terracotta / aged ballot stamp) */
+  --ember: 184 84 43;
+  --ember-soft: 240 224 213;
+
+  /* secondary categorization: sage */
+  --sage: 86 102 78;
+  --sage-soft: 224 228 218;
+
+  /* status */
+  --ok: 64 120 78;
+  --warn: 176 120 30;
+  --danger: 178 56 56;
+
+  --radius: 14px;
+
+  color-scheme: light;
+}
+
+.dark {
+  --paper: 14 15 18;
+  --surface: 22 22 27;
+  --surface-2: 28 28 34;
+  --hairline: 230 226 218;
+  --ink: 240 236 228;
+  --muted: 32 32 38;
+  --muted-fg: 156 152 144;
+
+  --ember: 218 124 84;
+  --ember-soft: 60 36 28;
+
+  --sage: 158 178 146;
+  --sage-soft: 36 44 34;
+
+  --ok: 130 188 138;
+  --warn: 220 168 80;
+  --danger: 226 116 116;
+
+  color-scheme: dark;
+}
+
+@layer base {
+  * {
+    border-color: rgb(var(--hairline) / 0.12);
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv11";
+    scroll-padding-top: 5rem;
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: rgb(var(--paper));
+    color: rgb(var(--ink));
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    font-variant-ligatures: common-ligatures;
+  }
+  /* tabular figures for dates, deadlines, counts */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+  }
+  /* editorial display font */
+  .display {
+    font-family: var(--font-serif), ui-serif, Georgia, serif;
+    letter-spacing: -0.022em;
+    font-feature-settings: "ss01";
+  }
+  /* selection */
+  ::selection {
+    background: rgb(var(--ember) / 0.22);
+    color: rgb(var(--ink));
+  }
+  /* focus */
+  :focus-visible {
+    outline: 2px solid rgb(var(--ember));
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  /* scrollbar — restrained */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--hairline) / 0.18);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--hairline) / 0.32);
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+}
+
+@layer components {
+  .hairline {
+    border: 1px solid rgb(var(--hairline) / 0.12);
+  }
+  .hairline-b {
+    border-bottom: 1px solid rgb(var(--hairline) / 0.10);
+  }
+  .hairline-t {
+    border-top: 1px solid rgb(var(--hairline) / 0.10);
+  }
+  .hairline-r {
+    border-right: 1px solid rgb(var(--hairline) / 0.10);
+  }
+  .hairline-l {
+    border-left: 1px solid rgb(var(--hairline) / 0.10);
+  }
+  .ink-card {
+    background: rgb(var(--surface));
+    border: 1px solid rgb(var(--hairline) / 0.10);
+    border-radius: var(--radius);
+  }
+  .ink-card-2 {
+    background: rgb(var(--surface-2));
+    border: 1px solid rgb(var(--hairline) / 0.08);
+    border-radius: calc(var(--radius) - 4px);
+  }
+  /* editorial paper texture — extremely subtle */
+  .paper-grain {
+    background-image:
+      radial-gradient(rgb(var(--hairline) / 0.025) 1px, transparent 1px);
+    background-size: 3px 3px;
+  }
+  /* a11y: large text mode */
+  .a11y-large {
+    font-size: 1.0625rem;
+    line-height: 1.65;
+  }
+  .a11y-large h1 { font-size: 2rem !important; }
+  .a11y-large h2 { font-size: 1.5rem !important; }
+
+  /* a11y: high-contrast mode — strengthen hairlines, deepen muted-fg */
+  html.contrast-more {
+    --muted-fg: 60 56 50;
+  }
+  html.contrast-more.dark {
+    --muted-fg: 200 196 188;
+  }
+  html.contrast-more * {
+    border-color: rgb(var(--hairline) / 0.32);
+  }
+}
+
+/* honour reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* skeleton shimmer — used in loading states */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgb(var(--surface-2));
+  border-radius: 8px;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    transparent 0,
+    rgb(var(--hairline) / 0.06) 40%,
+    rgb(var(--hairline) / 0.06) 60%,
+    transparent
+  );
+  animation: shimmer 1.6s infinite;
+}
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* button press depth — used by Button primary */
+.btn-press {
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 160ms cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 160ms ease;
+}
+.btn-press:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* timeline scrubber rail */
+.scrub-rail {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--hairline) / 0.10) 0,
+    rgb(var(--hairline) / 0.10) 100%
+  );
+}
+
+/* ink underline on links */
+.ink-underline {
+  background-image: linear-gradient(
+    to right,
+    rgb(var(--ember)) 0%,
+    rgb(var(--ember)) 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  background-position: 0 100%;
+}
