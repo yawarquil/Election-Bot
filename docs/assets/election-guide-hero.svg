@@ -1,0 +1,102 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="heroTitle heroDesc">
+  <title id="heroTitle">Election Guide Assistant editorial hero illustration</title>
+  <desc id="heroDesc">An animated editorial-style illustration showing a civic assistant interface, election timeline, and glossary cards in warm paper, ember, and sage tones.</desc>
+  <defs>
+    <linearGradient id="paperGlow" x1="140" y1="60" x2="1040" y2="640" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FCF8F2"/>
+      <stop offset="1" stop-color="#F5EFE5"/>
+    </linearGradient>
+    <linearGradient id="emberStroke" x1="223" y1="168" x2="964" y2="525" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D96F45"/>
+      <stop offset="1" stop-color="#A14A2A"/>
+    </linearGradient>
+    <filter id="shadow" x="112" y="84" width="976" height="552" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="20"/>
+      <feGaussianBlur stdDeviation="20"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.129412 0 0 0 0 0.141176 0 0 0 0 0.164706 0 0 0 0.12 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_hero"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_hero" result="shape"/>
+    </filter>
+    <clipPath id="heroClip">
+      <rect x="152" y="124" width="896" height="472" rx="30"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1200" height="720" rx="40" fill="#F3EBDD"/>
+  <circle cx="1012" cy="120" r="68" fill="#E7D6C4" opacity="0.65">
+    <animate attributeName="r" values="64;72;64" dur="6s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="192" cy="580" r="96" fill="#E3E9DE" opacity="0.7">
+    <animate attributeName="cy" values="580;568;580" dur="7s" repeatCount="indefinite"/>
+  </circle>
+
+  <g filter="url(#shadow)">
+    <rect x="152" y="124" width="896" height="472" rx="30" fill="url(#paperGlow)"/>
+    <rect x="152.75" y="124.75" width="894.5" height="470.5" rx="29.25" stroke="#D4C5B4" stroke-width="1.5"/>
+  </g>
+
+  <rect x="188" y="160" width="264" height="400" rx="24" fill="#FBF5EC" stroke="#D8CBB9"/>
+  <rect x="480" y="160" width="532" height="400" rx="24" fill="#FFFDF9" stroke="#D8CBB9"/>
+
+  <text x="218" y="214" fill="#252A33" font-family="Georgia, 'Times New Roman', serif" font-size="34" letter-spacing="-0.04em">Election Guide</text>
+  <text x="218" y="248" fill="#6A655E" font-family="Inter, Arial, sans-serif" font-size="16">Explain elections with trust, clarity, and calm.</text>
+
+  <g>
+    <rect x="218" y="286" width="204" height="54" rx="16" fill="#FFF7F1" stroke="#E1B89C"/>
+    <text x="242" y="320" fill="#A14A2A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="600">Ask the assistant</text>
+    <circle cx="392" cy="313" r="8" fill="#D96F45">
+      <animate attributeName="opacity" values="0.35;1;0.35" dur="1.8s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <g>
+    <rect x="218" y="364" width="204" height="84" rx="18" fill="#F7F8F5" stroke="#C8D1C2"/>
+    <text x="240" y="394" fill="#252A33" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600">Glossary Explorer</text>
+    <text x="240" y="420" fill="#6A655E" font-family="Inter, Arial, sans-serif" font-size="13">Plain-language civic terms</text>
+    <text x="240" y="440" fill="#7C8772" font-family="Inter, Arial, sans-serif" font-size="13">with “why it matters”.</text>
+  </g>
+
+  <g>
+    <rect x="218" y="468" width="204" height="64" rx="18" fill="#252A33"/>
+    <text x="242" y="506" fill="#F5EFE5" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600">Timeline • Checklist • FAQ</text>
+  </g>
+
+  <g clip-path="url(#heroClip)">
+    <rect x="516" y="204" width="460" height="116" rx="22" fill="#FBF5EC" stroke="url(#emberStroke)" stroke-width="1.5"/>
+    <text x="548" y="244" fill="#252A33" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Assistant Response</text>
+    <text x="548" y="274" fill="#6A655E" font-family="Inter, Arial, sans-serif" font-size="15">“You’re usually eligible if you are a citizen, meet the age rule,</text>
+    <text x="548" y="296" fill="#6A655E" font-family="Inter, Arial, sans-serif" font-size="15">and are registered at your current residence.”</text>
+
+    <g opacity="0.9">
+      <path d="M548 370H940" stroke="#C8D1C2" stroke-width="2" stroke-linecap="round" stroke-dasharray="8 10"/>
+      <rect x="568" y="354" width="124" height="32" rx="16" fill="#FFF1E6" stroke="#E1B89C"/>
+      <rect x="710" y="354" width="122" height="32" rx="16" fill="#F4F7F0" stroke="#C8D1C2"/>
+      <rect x="850" y="354" width="106" height="32" rx="16" fill="#FFFDF9" stroke="#D8CBB9"/>
+      <text x="594" y="375" fill="#A14A2A" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600">Quick</text>
+      <text x="742" y="375" fill="#5E6A56" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600">Student</text>
+      <text x="883" y="375" fill="#252A33" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="600">Detailed</text>
+    </g>
+
+    <g>
+      <rect x="548" y="420" width="184" height="96" rx="20" fill="#FFFDF9" stroke="#D8CBB9"/>
+      <rect x="760" y="420" width="184" height="96" rx="20" fill="#F7F8F5" stroke="#C8D1C2"/>
+      <text x="572" y="452" fill="#252A33" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Voting Day Guide</text>
+      <text x="572" y="476" fill="#6A655E" font-family="Inter, Arial, sans-serif" font-size="13">Carry your voter ID, verify</text>
+      <text x="572" y="496" fill="#6A655E" font-family="Inter, Arial, sans-serif" font-size="13">your polling station, and arrive early.</text>
+      <text x="784" y="452" fill="#252A33" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Personalized Checklist</text>
+      <text x="784" y="476" fill="#6A655E" font-family="Inter, Arial, sans-serif" font-size="13">Scenario-aware tasks for</text>
+      <text x="784" y="496" fill="#6A655E" font-family="Inter, Arial, sans-serif" font-size="13">students, movers, and first-time voters.</text>
+    </g>
+
+    <path d="M520 214C560 214 580 220 602 244C624 268 648 300 684 312C724 325 770 306 808 320C854 338 882 386 950 386" stroke="#D96F45" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 10">
+      <animate attributeName="stroke-dashoffset" values="0;-80" dur="8s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <g transform="translate(168 96)">
+    <rect x="0" y="0" width="176" height="40" rx="20" fill="#252A33"/>
+    <text x="22" y="26" fill="#F5EFE5" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600">Editorial civic-tech UI</text>
+  </g>
+</svg>
