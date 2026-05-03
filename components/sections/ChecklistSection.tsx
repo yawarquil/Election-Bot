@@ -153,7 +153,7 @@ export function ChecklistSection() {
               </>
             ) : (
               <div className="mt-1 text-[14px] font-medium text-ink">
-                You're all set for this scenario.
+                You&rsquo;re all set for this scenario.
               </div>
             )}
           </div>

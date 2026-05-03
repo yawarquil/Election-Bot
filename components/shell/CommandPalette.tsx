@@ -35,6 +35,9 @@ export function CommandPalette({ open, onClose, onNavigate, onAskAssistant }: Pr
     | { type: "term"; id: string; label: string; hint: string }
     | { type: "ask"; label: string; hint: string };
 
+  const resultKey = (result: Result, index: number) =>
+    "id" in result ? `${result.type}-${result.id}` : `${result.type}-${index}`;
+
   const results: Result[] = React.useMemo(() => {
     const needle = q.trim().toLowerCase();
     const navHits: Result[] = navItems
@@ -145,7 +148,7 @@ export function CommandPalette({ open, onClose, onNavigate, onAskAssistant }: Pr
                 </li>
               )}
               {results.map((r, i) => (
-                <li key={`${r.type}-${(r as any).id ?? i}`} role="option" aria-selected={i === active}>
+                <li key={resultKey(r, i)} role="option" aria-selected={i === active}>
                   <button
                     onMouseEnter={() => setActive(i)}
                     onClick={() => runResult(r)}

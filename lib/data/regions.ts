@@ -47,5 +47,9 @@ export const regions: Region[] = [
   },
 ];
 
+const fallbackRegion = regions[regions.length - 1];
+
+const regionMap = new Map(regions.map((region) => [region.id, region]));
+
 export const getRegion = (id: string) =>
-  regions.find((r) => r.id === id) ?? regions[regions.length - 1];
+  regionMap.get(id) ?? fallbackRegion;

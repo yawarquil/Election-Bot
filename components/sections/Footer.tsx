@@ -50,7 +50,7 @@ export function Footer() {
           <p className="mt-3 text-[12.5px] leading-relaxed text-muted-fg">
             This guide is educational. Election rules and dates vary by region
             and update over time. For binding information, always consult your
-            country's election commission, electoral office, or equivalent.
+            country&rsquo;s election commission, electoral office, or equivalent.
           </p>
         </div>
       </div>

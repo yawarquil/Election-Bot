@@ -8,6 +8,8 @@ import { useStore } from "@/lib/store";
 import { Button } from "@/components/ui/Button";
 import { RotateCcw } from "lucide-react";
 
+type ThemeMode = "light" | "dark" | "system";
+
 interface Props {
   open: boolean;
   onClose: () => void;
@@ -37,7 +39,7 @@ export function SettingsSheet({ open, onClose }: Props) {
             Theme
           </h4>
           <div className="mt-2.5">
-            <Segmented
+            <Segmented<ThemeMode>
               ariaLabel="Theme"
               options={[
                 { value: "light", label: "Light" },
@@ -45,7 +47,7 @@ export function SettingsSheet({ open, onClose }: Props) {
                 { value: "system", label: "System" },
               ]}
               value={theme}
-              onChange={(v) => setTheme(v as any)}
+              onChange={setTheme}
             />
           </div>
         </section>

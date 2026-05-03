@@ -55,6 +55,31 @@ const glossaryAliases: Record<string, string[]> = {
   "tendered-ballot": ["tendered ballot", "challenged ballot"],
 };
 
+const intents: [string, string][] = [
+  ["eligib", "am i eligible"],
+  ["minimum age", "am i eligible"],
+  ["age requirement", "am i eligible"],
+  ["old enough", "am i eligible"],
+  ["register", "how do i register"],
+  ["registration", "how do i register"],
+  ["on the roll", "how do i check im on the roll"],
+  ["electoral roll", "how do i check im on the roll"],
+  ["voter roll", "how do i check im on the roll"],
+  ["name is missing", "what if my name is missing"],
+  ["name missing", "what if my name is missing"],
+  ["election day", "what happens on election day"],
+  ["polling day", "what happens on election day"],
+  ["timeline", "show the full election timeline"],
+  ["phases", "show the full election timeline"],
+  ["stages", "show the full election timeline"],
+  ["document", "what documents do i need"],
+  ["first-time", "explain this like i'm a first-time voter"],
+  ["first time", "explain this like i'm a first-time voter"],
+  ["compare", "compare national and local elections"],
+  ["constituency", "what does constituency mean"],
+  ["where do i vote", "where do i vote"],
+];
+
 function answerFromTerm(term: Term): AssistantAnswer {
   return {
     quick: term.short,
@@ -85,6 +110,23 @@ function glossaryAnswerFor(query: string): AssistantAnswer | null {
 
   return found ? answerFromTerm(found) : null;
 }
+
+function intentAnswerFor(query: string): AssistantAnswer | null {
+  for (const [needle, key] of intents) {
+    if (query.includes(needle)) return assistantAnswers[key];
+  }
+  if (query.includes("age") && (query.includes("vote") || query.includes("eligible") || query.includes("requirement"))) {
+    return assistantAnswers["am i eligible"];
+  }
+  return null;
+}
+
+const isProceduralQuestion = (query: string) =>
+  /^(how|where|when|can|am|which|show)\b/.test(query) ||
+  query.includes("what happens") ||
+  query.includes("do i need") ||
+  query.includes("should i") ||
+  query.includes("if my");
 
 export const assistantAnswers: Record<string, AssistantAnswer> = {
   "am i eligible": a(
@@ -171,38 +213,11 @@ export function answerFor(query: string): AssistantAnswer | null {
   const q = normalize(query);
   if (!q) return null;
   if (assistantAnswers[q]) return assistantAnswers[q];
+  if (isProceduralQuestion(q)) {
+    const proceduralAnswer = intentAnswerFor(q);
+    if (proceduralAnswer) return proceduralAnswer;
+  }
   const glossaryAnswer = glossaryAnswerFor(q);
   if (glossaryAnswer) return glossaryAnswer;
-  // intent fallback
-  const intents: [string, string][] = [
-    ["eligib", "am i eligible"],
-    ["minimum age", "am i eligible"],
-    ["age requirement", "am i eligible"],
-    ["old enough", "am i eligible"],
-    ["register", "how do i register"],
-    ["registration", "how do i register"],
-    ["on the roll", "how do i check im on the roll"],
-    ["electoral roll", "how do i check im on the roll"],
-    ["voter roll", "how do i check im on the roll"],
-    ["name is missing", "what if my name is missing"],
-    ["name missing", "what if my name is missing"],
-    ["election day", "what happens on election day"],
-    ["polling day", "what happens on election day"],
-    ["timeline", "show the full election timeline"],
-    ["phases", "show the full election timeline"],
-    ["stages", "show the full election timeline"],
-    ["document", "what documents do i need"],
-    ["first-time", "explain this like i'm a first-time voter"],
-    ["first time", "explain this like i'm a first-time voter"],
-    ["compare", "compare national and local elections"],
-    ["constituency", "what does constituency mean"],
-    ["where do i vote", "where do i vote"],
-  ];
-  for (const [needle, key] of intents) {
-    if (q.includes(needle)) return assistantAnswers[key];
-  }
-  if (q.includes("age") && (q.includes("vote") || q.includes("eligible") || q.includes("requirement"))) {
-    return assistantAnswers["am i eligible"];
-  }
-  return null;
+  return intentAnswerFor(q);
 }

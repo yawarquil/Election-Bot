@@ -43,6 +43,16 @@ const ALL_SECTIONS = [
   "assistant",
 ];
 
+const MAX_QUESTION_LENGTH = 280;
+
+const sanitizeQuestion = (value: string) =>
+  value.replace(/\s+/g, " ").trim().slice(0, MAX_QUESTION_LENGTH);
+
+const createTurnId = (prefix: "u" | "a") =>
+  typeof crypto !== "undefined" && "randomUUID" in crypto
+    ? `${prefix}-${crypto.randomUUID()}`
+    : `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
 export default function Page() {
   const [active, setActive] = React.useState<string>("entry");
   const [paletteOpen, setPaletteOpen] = React.useState(false);
@@ -52,6 +62,7 @@ export default function Page() {
   const [turns, setTurns] = React.useState<Turn[]>([]);
   const [loading, setLoading] = React.useState(false);
   const depth = useStore((s) => s.depth);
+  const pendingTimers = React.useRef<number[]>([]);
 
   // ⌘K / Ctrl+K opens palette
   React.useEffect(() => {
@@ -90,6 +101,14 @@ export default function Page() {
     return () => observers.forEach((o) => o.disconnect());
   }, []);
 
+  React.useEffect(
+    () => () => {
+      pendingTimers.current.forEach((timer) => window.clearTimeout(timer));
+      pendingTimers.current = [];
+    },
+    []
+  );
+
   const navigate = (id: string) => {
     setActive(id);
     const el = document.getElementById(id);
@@ -97,26 +116,25 @@ export default function Page() {
   };
 
   const ask = (q: string) => {
-    if (!q.trim()) return;
+    const question = sanitizeQuestion(q);
+    if (!question) return;
 
-    // ensure assistant is visible
     setTurns((cur) => [
       ...cur,
-      { id: `u-${Date.now()}`, role: "user", text: q.trim() },
+      { id: createTurnId("u"), role: "user", text: question },
     ]);
     setLoading(true);
 
-    // navigate to assistant section so user sees answer
-    setTimeout(() => navigate("assistant"), 50);
+    const navigateTimer = window.setTimeout(() => navigate("assistant"), 50);
+    pendingTimers.current.push(navigateTimer);
 
-    // simulate "thinking" for premium feel
     const delay = 360 + Math.random() * 320;
-    window.setTimeout(() => {
-      const r = generateAnswer(q.trim(), depth);
+    const answerTimer = window.setTimeout(() => {
+      const r = generateAnswer(question, depth);
       setTurns((cur) => [
         ...cur,
         {
-          id: `a-${Date.now()}`,
+          id: createTurnId("a"),
           role: "assistant",
           text: r.text,
           next: r.next,
@@ -125,6 +143,7 @@ export default function Page() {
       ]);
       setLoading(false);
     }, delay);
+    pendingTimers.current.push(answerTimer);
   };
 
   return (
@@ -137,7 +156,7 @@ export default function Page() {
 
       <div className="flex min-w-0 flex-1">
         <SideNav active={active} onNavigate={navigate} />
-        <main className="min-w-0 flex-1 pb-24 lg:pb-0">
+        <main id="main-content" className="min-w-0 flex-1 pb-24 lg:pb-0">
           <Entry onAsk={ask} onNavigate={navigate} />
           <ProcessFlow onNavigate={navigate} />
           <Eligibility onContinue={navigate} />
@@ -150,7 +169,6 @@ export default function Page() {
             turns={turns}
             setTurns={setTurns}
             loading={loading}
-            setLoading={setLoading}
             onSubmit={ask}
           />
           <Footer />

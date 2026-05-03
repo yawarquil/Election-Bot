@@ -38,7 +38,7 @@ export default function RootLayout({
       <body className={`${sans.variable} ${serif.variable} ${mono.variable}`}>
         <ThemeBootstrap>
           <a
-            href="#entry"
+            href="#main-content"
             className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:rounded-md focus:bg-ink focus:px-3 focus:py-1.5 focus:text-paper"
           >
             Skip to content

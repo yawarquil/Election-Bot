@@ -1,4 +1,4 @@
-import type { ChecklistItem } from "../types";
+import type { ChecklistItem, ScenarioId } from "../types";
 
 // One library of items, each tagged with the scenarios it belongs to.
 // The checklist UI generates the right list per user.
@@ -121,5 +121,21 @@ export const checklistLibrary: ChecklistItem[] = [
   },
 ];
 
-export const checklistFor = (scenarioId: string) =>
-  checklistLibrary.filter((c) => c.scenarios.includes(scenarioId as any));
+const checklistByScenario = checklistLibrary.reduce<Record<ScenarioId, ChecklistItem[]>>(
+  (acc, item) => {
+    item.scenarios.forEach((scenario) => {
+      acc[scenario].push(item);
+    });
+    return acc;
+  },
+  {
+    "first-time": [],
+    registered: [],
+    moved: [],
+    correction: [],
+    "polling-info": [],
+    learning: [],
+  }
+);
+
+export const checklistFor = (scenarioId: ScenarioId) => checklistByScenario[scenarioId] ?? [];

@@ -97,6 +97,7 @@ export function Entry({ onAsk, onNavigate }: Props) {
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
+              maxLength={280}
               placeholder='Try: "How do I register?" or "What documents do I need?"'
               aria-label="What do you want to understand?"
               className={cn(

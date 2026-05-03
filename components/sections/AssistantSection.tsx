@@ -23,12 +23,9 @@ interface Turn {
 }
 
 interface Props {
-  // controlled history shared with right-panel via parent
   turns: Turn[];
   setTurns: React.Dispatch<React.SetStateAction<Turn[]>>;
   loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  /** lift submission so other surfaces can drive it */
   onSubmit: (q: string) => void;
 }
 
@@ -99,7 +96,13 @@ export function AssistantSection({ turns, setTurns, loading, onSubmit }: Props) 
               )}
             </header>
 
-            <div className="min-h-[320px] flex-1 space-y-4 px-4 py-4 sm:px-6 sm:py-5">
+            <div
+              role="log"
+              aria-live="polite"
+              aria-relevant="additions text"
+              aria-busy={loading}
+              className="min-h-[320px] flex-1 space-y-4 px-4 py-4 sm:px-6 sm:py-5"
+            >
               {turns.length === 0 && <AssistantEmpty onSuggest={submit} />}
               <AnimatePresence initial={false}>
                 {turns.map((t) => (
@@ -164,6 +167,9 @@ export function AssistantSection({ turns, setTurns, loading, onSubmit }: Props) 
               }}
               className="flex items-end gap-2 border-t border-[rgb(var(--hairline)_/_0.10)] bg-surface-2/40 p-3"
             >
+              <span id="assistant-help" className="sr-only">
+                Ask a question about elections. Press Enter to submit or Shift plus Enter for a new line.
+              </span>
               <textarea
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
@@ -174,7 +180,9 @@ export function AssistantSection({ turns, setTurns, loading, onSubmit }: Props) 
                   }
                 }}
                 rows={1}
+                maxLength={280}
                 placeholder="Type your question. Press Enter to ask, Shift+Enter for a new line."
+                aria-describedby="assistant-help"
                 className={cn(
                   "min-h-[40px] flex-1 resize-none rounded-[10px] border border-transparent bg-paper px-3 py-2 text-[14px] text-ink outline-none",
                   "focus:border-[rgb(var(--hairline)_/_0.20)]"

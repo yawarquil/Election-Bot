@@ -7,7 +7,6 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { glossary, findTerm } from "@/lib/data/glossary";
 import { cn } from "@/lib/cn";
 import { Badge } from "@/components/ui/Badge";
-import type { Term } from "@/lib/types";
 
 interface Props {
   onAsk: (q: string) => void;
@@ -151,7 +150,7 @@ export function GlossarySection({ onAsk }: Props) {
 
                 <div className="mt-6 flex items-center justify-between border-t border-[rgb(var(--hairline)_/_0.10)] pt-4">
                   <span className="text-[12px] text-muted-fg">
-                    Want this in a sentence you'd actually say?
+                    Want this in a sentence you&rsquo;d actually say?
                   </span>
                   <button
                     onClick={() => onAsk(`What does ${active.term} mean?`)}

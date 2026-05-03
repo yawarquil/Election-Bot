@@ -117,7 +117,7 @@ export function Eligibility({ onContinue }: Props) {
                 <>
                   <p className="mt-2 text-[14px] leading-relaxed text-ink">
                     You may not be eligible for this election based on your answers.
-                    A 'no' on any of these usually means voting isn't possible this
+                    A &lsquo;no&rsquo; on any of these usually means voting isn&rsquo;t possible this
                     cycle — but rules vary by jurisdiction.
                   </p>
                   <p className="mt-2 text-[12.5px] text-muted-fg">
@@ -128,7 +128,7 @@ export function Eligibility({ onContinue }: Props) {
               {allYes && (
                 <>
                   <p className="mt-2 text-[14px] leading-relaxed text-ink">
-                    You're likely eligible. Next step: check that your name is on
+                    You&rsquo;re likely eligible. Next step: check that your name is on
                     the electoral roll for your address.
                   </p>
                   <Button
