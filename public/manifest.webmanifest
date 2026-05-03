@@ -1,0 +1,18 @@
+{
+  "name": "Election Guide Assistant",
+  "short_name": "ElectionGuide",
+  "description": "A calm, non-partisan civic companion that walks you through elections — timeline, paperwork, and polling-day reality in plain language.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8f6f1",
+  "theme_color": "#c74a2a",
+  "orientation": "any",
+  "categories": ["education", "government"],
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}

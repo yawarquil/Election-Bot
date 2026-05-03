@@ -2,6 +2,8 @@
   "name": "election-guide-assistant",
   "version": "1.0.0",
   "private": true,
+  "license": "MIT",
+  "homepage": "https://election-guide-assistant-is2rul5cxa-el.a.run.app",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

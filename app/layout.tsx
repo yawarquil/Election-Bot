@@ -3,6 +3,7 @@ import { Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeBootstrap } from "@/components/shell/ThemeBootstrap";
 import { Analytics } from "@/components/shell/Analytics";
+import { ErrorBoundary } from "@/components/shell/ErrorBoundary";
 
 const sans = Inter({
   subsets: ["latin"],
@@ -40,6 +41,7 @@ export const metadata: Metadata = {
     "polling day",
     "voter education",
   ],
+  manifest: "/manifest.webmanifest",
   robots: { index: true, follow: true },
   openGraph: {
     type: "website",
@@ -80,7 +82,9 @@ export default function RootLayout({
           >
             Skip to content
           </a>
-          {children}
+          <ErrorBoundary>
+            {children}
+          </ErrorBoundary>
         </ThemeBootstrap>
         <Analytics />
       </body>
