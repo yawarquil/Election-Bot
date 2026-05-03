@@ -151,10 +151,10 @@ flowchart TB
 ## Technology stack
 
 - **Framework**
-  - Next.js 14 with App Router
+  - Next.js 14 with App Router, edge middleware, and Route Handlers
 
 - **Language**
-  - TypeScript
+  - TypeScript (strict)
 
 - **Styling**
   - Tailwind CSS with token-driven theming
@@ -168,31 +168,56 @@ flowchart TB
 - **Icons**
   - Lucide React
 
+- **Testing**
+  - Vitest with 80+ tests (`tests/`)
+
 - **Hosting**
-  - Google Cloud Run
+  - Google Cloud Run (`asia-south1`) with declarative service config
+
+- **Container registry**
+  - Google Artifact Registry
 
 - **CI/CD**
-  - GitHub Actions with Artifact Registry deployment
+  - GitHub Actions via Workload Identity Federation, plus `cloudbuild.yaml` for Google Cloud Build
+
+- **Observability**
+  - Structured Google Cloud Logging from `lib/google-cloud/logger.ts`
+
+- **Analytics (optional)**
+  - Google Analytics (GA4) wired through `NEXT_PUBLIC_GA_MEASUREMENT_ID`
 
 ## Repository structure
 
 ```text
 app/
+  api/health/route.ts    # Cloud Run readiness probe
   globals.css
   layout.tsx
   page.tsx
 components/
   sections/
-  shell/
+  shell/                 # TopBar, SideNav, CommandPalette, Analytics, ...
   ui/
+deploy/
+  cloud-run-service.yaml # Declarative Cloud Run config
 docs/
   assets/
+  GOOGLE_CLOUD.md
+  SECURITY.md
+  ACCESSIBILITY.md
+  TESTING.md
 lib/
-  data/
+  data/                  # Strongly-typed content modules
+  google-cloud/          # Cloud Logging + GA4 integration
   store.ts
   types.ts
+  validation.ts          # Input validation and sanitization
+tests/                   # 80+ Vitest unit tests
 .github/
-  workflows/
+  workflows/             # GitHub Actions deploy pipeline
+cloudbuild.yaml          # Cloud Build alternative pipeline
+middleware.ts            # Request-id + trace correlation
+Dockerfile               # Minimal Node 20 runtime image
 ```
 
 ## Content architecture
@@ -263,9 +288,33 @@ The project is deployed to Cloud Run through GitHub Actions.
 ### Deployment flow
 
 1. Push to `main`
-2. GitHub Actions validates the app with `npm ci` and `npm run build`
-3. Docker image is built and pushed to Artifact Registry
-4. Cloud Run deploys the latest revision publicly
+2. GitHub Actions runs lint, tests, and build
+3. The service authenticates to Google Cloud via **Workload Identity Federation**
+4. Docker image is built and pushed to **Artifact Registry**
+5. **Cloud Run** deploys the latest revision publicly
+6. `/api/health` emits structured **Cloud Logging** entries for every probe
+
+Alternative pipeline: `cloudbuild.yaml` runs an equivalent flow entirely
+inside Google Cloud via **Cloud Build**.
+
+See [`docs/GOOGLE_CLOUD.md`](./docs/GOOGLE_CLOUD.md) for the full service
+inventory, declarative Cloud Run config, and operator runbook.
+
+## Quality, security, and accessibility
+
+- [`docs/GOOGLE_CLOUD.md`](./docs/GOOGLE_CLOUD.md) — Google Cloud integration
+- [`docs/SECURITY.md`](./docs/SECURITY.md) — CSP, middleware, validation, dependency policy
+- [`docs/ACCESSIBILITY.md`](./docs/ACCESSIBILITY.md) — WCAG 2.1 AA notes and testing approach
+- [`docs/TESTING.md`](./docs/TESTING.md) — 80+ Vitest tests across the data layer and infrastructure
+
+## Validation
+
+```bash
+npm run lint
+npm test
+npm run build
+npm run ci   # runs all three sequentially
+```
 
 ## Professional positioning
 

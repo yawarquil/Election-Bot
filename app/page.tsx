@@ -22,6 +22,12 @@ import { AssistantSection, generateAnswer } from "@/components/sections/Assistan
 import { Footer } from "@/components/sections/Footer";
 
 import { useStore } from "@/lib/store";
+import {
+  ASSISTANT_QUESTION_LIMITS,
+  sanitizeFreeText,
+  validateQuestion,
+} from "@/lib/validation";
+import { trackEvent } from "@/lib/google-cloud/analytics";
 
 interface Turn {
   id: string;
@@ -43,10 +49,14 @@ const ALL_SECTIONS = [
   "assistant",
 ];
 
-const MAX_QUESTION_LENGTH = 280;
-
-const sanitizeQuestion = (value: string) =>
-  value.replace(/\s+/g, " ").trim().slice(0, MAX_QUESTION_LENGTH);
+const sanitizeQuestion = (value: string) => {
+  const cleaned = sanitizeFreeText(value).slice(
+    0,
+    ASSISTANT_QUESTION_LIMITS.max
+  );
+  const result = validateQuestion(cleaned);
+  return result.ok ? result.value : "";
+};
 
 const createTurnId = (prefix: "u" | "a") =>
   typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -115,36 +125,44 @@ export default function Page() {
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const ask = (q: string) => {
-    const question = sanitizeQuestion(q);
-    if (!question) return;
+  const ask = React.useCallback(
+    (q: string) => {
+      const question = sanitizeQuestion(q);
+      if (!question) return;
 
-    setTurns((cur) => [
-      ...cur,
-      { id: createTurnId("u"), role: "user", text: question },
-    ]);
-    setLoading(true);
+      trackEvent("assistant_question", {
+        length: question.length,
+        depth,
+      });
 
-    const navigateTimer = window.setTimeout(() => navigate("assistant"), 50);
-    pendingTimers.current.push(navigateTimer);
-
-    const delay = 360 + Math.random() * 320;
-    const answerTimer = window.setTimeout(() => {
-      const r = generateAnswer(question, depth);
       setTurns((cur) => [
         ...cur,
-        {
-          id: createTurnId("a"),
-          role: "assistant",
-          text: r.text,
-          next: r.next,
-          notFound: r.notFound,
-        },
+        { id: createTurnId("u"), role: "user", text: question },
       ]);
-      setLoading(false);
-    }, delay);
-    pendingTimers.current.push(answerTimer);
-  };
+      setLoading(true);
+
+      const navigateTimer = window.setTimeout(() => navigate("assistant"), 50);
+      pendingTimers.current.push(navigateTimer);
+
+      const delay = 360 + Math.random() * 320;
+      const answerTimer = window.setTimeout(() => {
+        const r = generateAnswer(question, depth);
+        setTurns((cur) => [
+          ...cur,
+          {
+            id: createTurnId("a"),
+            role: "assistant",
+            text: r.text,
+            next: r.next,
+            notFound: r.notFound,
+          },
+        ]);
+        setLoading(false);
+      }, delay);
+      pendingTimers.current.push(answerTimer);
+    },
+    [depth]
+  );
 
   return (
     <div className="flex min-h-screen flex-col bg-paper">

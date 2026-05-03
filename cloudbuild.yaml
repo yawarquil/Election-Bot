@@ -1,0 +1,79 @@
+# Google Cloud Build pipeline for the Election Guide Assistant.
+# Triggered on pushes to main/master and deploys the container to
+# Cloud Run in asia-south1 via the shared Artifact Registry repository.
+#
+# Usage:
+#   gcloud builds submit --config cloudbuild.yaml \
+#     --substitutions=_REGION=asia-south1,_SERVICE=election-guide-assistant
+#
+# Required substitutions:
+#   _REGION         Google Cloud region (e.g. asia-south1)
+#   _SERVICE        Cloud Run service name
+#   _REPOSITORY     Artifact Registry repository name
+
+substitutions:
+  _REGION: asia-south1
+  _SERVICE: election-guide-assistant
+  _REPOSITORY: election-guide-assistant
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: E2_HIGHCPU_8
+  dynamic_substitutions: true
+
+steps:
+  - id: install-dependencies
+    name: node:20-alpine
+    entrypoint: npm
+    args: ["ci"]
+
+  - id: lint
+    name: node:20-alpine
+    entrypoint: npm
+    args: ["run", "lint"]
+
+  - id: test
+    name: node:20-alpine
+    entrypoint: npm
+    args: ["test"]
+
+  - id: build-container
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:$COMMIT_SHA
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:latest
+      - .
+
+  - id: push-container
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - --all-tags
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}
+
+  - id: deploy-cloud-run
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE}
+      - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:$COMMIT_SHA
+      - --region=${_REGION}
+      - --platform=managed
+      - --allow-unauthenticated
+      - --min-instances=0
+      - --max-instances=4
+      - --concurrency=80
+      - --cpu=1
+      - --memory=512Mi
+      - --set-env-vars=NEXT_TELEMETRY_DISABLED=1
+
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:$COMMIT_SHA
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_SERVICE}:latest
+
+timeout: 1200s

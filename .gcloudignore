@@ -1,0 +1,22 @@
+# Files excluded from Google Cloud uploads (Cloud Build / gcloud deploy).
+# Keep this aligned with .gitignore and .dockerignore so container builds
+# stay small and reproducible.
+
+.git
+.gitignore
+.github/
+.next/
+node_modules/
+coverage/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+npm-debug.log*
+yarn-error.log
+tests/
+docs/
+README.md
+*.md
+!package.json
+!package-lock.json

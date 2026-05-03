@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeBootstrap } from "@/components/shell/ThemeBootstrap";
+import { Analytics } from "@/components/shell/Analytics";
 
 const sans = Inter({
   subsets: ["latin"],
@@ -23,9 +24,45 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Election Guide Assistant — understand elections, step by step",
+  title: {
+    default: "Election Guide Assistant — understand elections, step by step",
+    template: "%s · Election Guide Assistant",
+  },
   description:
     "A calm, non-partisan civic companion that walks you through the timeline, paperwork, and polling-day reality of voting — in plain language.",
+  applicationName: "Election Guide Assistant",
+  authors: [{ name: "Election Guide Assistant" }],
+  keywords: [
+    "elections",
+    "voting",
+    "civic tech",
+    "electoral roll",
+    "polling day",
+    "voter education",
+  ],
+  robots: { index: true, follow: true },
+  openGraph: {
+    type: "website",
+    title: "Election Guide Assistant",
+    description:
+      "A calm, non-partisan civic companion for voters — timeline, paperwork, and polling-day reality in plain language.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Election Guide Assistant",
+    description:
+      "Non-partisan, accessibility-first civic companion for voters.",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f8f6f1" },
+    { media: "(prefers-color-scheme: dark)", color: "#111111" },
+  ],
 };
 
 export default function RootLayout({
@@ -45,6 +82,7 @@ export default function RootLayout({
           </a>
           {children}
         </ThemeBootstrap>
+        <Analytics />
       </body>
     </html>
   );
