@@ -60,7 +60,7 @@ jobs:
       - name: Build and push container image
         run: |
           IMAGE_URI="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${GAR_REPOSITORY}/${CLOUD_RUN_SERVICE}:${GITHUB_SHA}"
-          docker build -t "$IMAGE_URI" .
+          docker build --progress=plain -t "$IMAGE_URI" .
           docker push "$IMAGE_URI"
           echo "IMAGE_URI=$IMAGE_URI" >> "$GITHUB_ENV"
 
